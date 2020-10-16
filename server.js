@@ -16,7 +16,7 @@ var flash = require('express-flash');
 //app.use(cookieParser());
 require('dotenv').config();
 //db.connect();
-db.connect(process.env.Connection_String, true);
+db.connect('mongodb+srv://venkat_chintu:Uppalanchi@14@cluster0.a4lxc.mongodb.net/<dbname>?retryWrites=true&w=majority', true);
 
 app.set('view engine','ejs');
 app.set('views', path.join(__dirname, 'Frontend', 'views'));
