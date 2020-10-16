@@ -15,7 +15,7 @@ var flash = require('express-flash');
 //var cookieParser = require('cookie-parser');
 //app.use(cookieParser());
 require('dotenv').config();
-//db.connect();
+
 db.connect('mongodb+srv://venkat_chintu:Uppalanchi@14@cluster0.a4lxc.mongodb.net/<dbname>?retryWrites=true&w=majority', true);
 
 app.set('view engine','ejs');
@@ -53,8 +53,7 @@ app.get('/register',checkNotAuthenticated, (req,res) =>{
 
 app.post('/register', async (req,res) =>{
     try{
-        var HashPassword = await bcrypt.hash(req.body.password, 10);
-        req.body.password = HashPassword;
+        req.body.password = await bcrypt.hash(req.body.password, 10);
         userLib.createUser(req.body);
         res.redirect('/login');
     }catch(err){
