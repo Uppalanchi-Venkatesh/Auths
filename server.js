@@ -26,7 +26,7 @@ app.use(bodyParser.urlencoded({ extended: true }));
 app.use(flash());
 app.use(bodyParser.json());
 app.use(session({
-    secret : process.env.SESSION_SECRET,
+    secret : 'secret',
     resave : true,
     saveUninitialized : true,
     cookie: {
