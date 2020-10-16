@@ -52,7 +52,8 @@ app.get('/register',checkNotAuthenticated, (req,res) =>{
 
 app.post('/register', async (req,res) =>{
     try{
-        req.body.password = await bcrypt.hash(req.body.password, 10);
+        var HashPassword = await bcrypt.hash(req.body.password, 10);
+        req.body.password = HashPassword;
         userLib.createUser(req.body);
         res.redirect('/login');
     }catch(err){

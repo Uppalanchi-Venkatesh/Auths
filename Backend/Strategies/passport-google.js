@@ -9,11 +9,15 @@ passport.serializeUser((user, done)=> {
 
 passport.deserializeUser((id , done)=>{
     var query = {_id : id};
-    userLib.getItemById(query, model, (err, dbUser)=>{
-        if(err)
-            return done(err,dbUser);
-        return done(null,dbUser);
+    model.findById(query)
+    .then((user) =>{
+        return done(null,user);
     });
+    // userLib.getItemById(query, model, (err, dbUser)=>{
+    //     if(err)
+    //         return done(err,dbUser);
+    //     return done(null,dbUser);
+    // });
 });
 
 var customFields = {
@@ -27,13 +31,12 @@ var verifyCallback = (accessToken, refreshToken, profile, done) =>{
     //console.log("Profile : "+JSON.stringify(profile));
     //console.log("Email : "+ JSON.stringify(profile.emails[0].value));
     var query = {email : profile.emails[0].value};
-        userLib.getSingleItemByQuery(query, model, (err, user)=>{
-        if(err)
-            return done(err, {message : err});
-        if(!user)
-            return done(null, false, {message : 'Email is incorrect'});
-        //console.log("User logged in succeessfully");
-        return done(null, user, {message : 'Successfully logged in'});
+    //userLib.getSingleItemByQuery(query, model, (err, user)=>{
+    model.findOne(query).then((user) =>{
+    if(!user)
+        return done(null, false, {message : 'Email is incorrect'});
+    //console.log("User logged in succeessfully");
+    return done(null, user, {message : 'Successfully logged in'});
     });
 }
 
