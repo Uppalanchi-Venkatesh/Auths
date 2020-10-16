@@ -22,12 +22,12 @@ var customFields = {
     callbackURL: '/google/callback'
 }
 
-var verifyCallback = async (accessToken, refreshToken, profile, done) =>{
+var verifyCallback = (accessToken, refreshToken, profile, done) =>{
     //console.log("Profile : "+ profile.displayName);
     //console.log("Profile : "+JSON.stringify(profile));
     //console.log("Email : "+ JSON.stringify(profile.emails[0].value));
     var query = {email : profile.emails[0].value};
-    await userLib.getSingleItemByQuery(query, model, (err, user)=>{
+        userLib.getSingleItemByQuery(query, model, (err, user)=>{
         if(err)
             return done(err, {message : err});
         if(!user)

@@ -19,9 +19,9 @@ passport.deserializeUser((id , done)=>{
 
 var Fields = {username : 'username', password : 'password'};
 
-var authenticateUser = async (username, password, done) =>{
+var authenticateUser = (username, password, done) =>{
     var query = {username : username};
-    await userLib.getSingleItemByQuery(query, model, async (err,user) =>{
+    userLib.getSingleItemByQuery(query, model, async (err,user) =>{
         if(err)
             return done(err, {message : err});
         if(!user)
