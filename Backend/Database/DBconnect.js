@@ -1,10 +1,10 @@
 var mongoose = require('mongoose');
-require('dotenv').config();
+//require('dotenv').config();
 
 module.exports.connect = function(connection_string, auto_reconnect){
     console.log("Trying to connect to MongoDB");
     var dbOptions = {useCreateIndex: true, useNewUrlParser: true, useUnifiedTopology: true, auto_reconnect: true};
-    var connection_string= process.env.Connection_String;
+    //var connection_string= process.env.Connection_String;
     if(auto_reconnect!==null && auto_reconnect!==undefined)
         dbOptions.auto_reconnect = auto_reconnect;
 

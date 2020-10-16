@@ -15,7 +15,8 @@ var flash = require('express-flash');
 //var cookieParser = require('cookie-parser');
 //app.use(cookieParser());
 require('dotenv').config();
-db.connect();
+//db.connect();
+db.connect(process.env.Connection_String, true);
 
 app.set('view engine','ejs');
 app.set('views', path.join(__dirname, 'Frontend', 'views'));
@@ -25,7 +26,7 @@ app.use(bodyParser.urlencoded({ extended: true }));
 app.use(flash());
 app.use(bodyParser.json());
 app.use(session({
-    secret : 'secret',
+    secret : process.env.SESSION_SECRET,
     resave : true,
     saveUninitialized : true,
     cookie: {
