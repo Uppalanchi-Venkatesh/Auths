@@ -15,7 +15,7 @@ var flash = require('express-flash');
 //var cookieParser = require('cookie-parser');
 //app.use(cookieParser());
 require('dotenv').config();
-db.connect(true);
+db.connect();
 
 app.set('view engine','ejs');
 app.set('views', path.join(__dirname, 'Frontend', 'views'));
