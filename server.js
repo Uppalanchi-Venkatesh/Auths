@@ -55,7 +55,8 @@ app.post('/register', async (req,res) =>{
         req.body.password = await bcrypt.hash(req.body.password, 10);
         userLib.createUser(req.body);
         res.redirect('/login');
-    }catch{
+    }catch(err){
+        console.log("Error : "+err);
         res.redirect('/register');
     }
 });
