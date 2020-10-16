@@ -23,15 +23,15 @@ var authenticateUser = (username, password, done) =>{
     var query = {username : username};
     userLib.getSingleItemByQuery(query, model, (err,user) =>{
         if(err)
-            return done(err);
+            return done(err, {message : err});
         if(!user)
-            return done(null,false);
+            return done(null, false, {message : 'Username is incorrect'});
         bcrypt.compare(password, user.password, (err, result) =>{
             if(err)
-                return done(err);
+                return done(err, {message : err});
             if(result)
                 return done(null, user);
-            return done(null, false);
+            return done(null, false, {message : 'Password is incorrect!!'});
         });
     });
 }

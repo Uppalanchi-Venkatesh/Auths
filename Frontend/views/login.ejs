@@ -9,6 +9,12 @@
     <h1 style="text-align: center;">Login</h1>
     <div class="col-md-offset-3 col-md-6 col-md-offset-3">
         <form class="myform" action="/login" method="POST">
+          <!--<% if(messages.errors) { %>
+            <h1><%= messages.errors %></h1>
+          <% } %>-->
+          <% if (messages.length > 0) { %>
+            <div class="alert alert-danger"><%= messages %></div>
+          <% } %>
             <div class="form-group">
               <label for="username">User Name</label>
               <input type="username" required class="form-control" name="username">
@@ -19,6 +25,7 @@
             </div>
             <button type="submit" class="btn btn-primary">Login</button>
             <p style="margin-top: 10;"><b>New User?</b>  <a href="/register">click here</a></p>
+            <a href="/google">Google Login</a>
         </form>
     </div>
     <%- include('./partials/ScriptLinks.ejs') %>
