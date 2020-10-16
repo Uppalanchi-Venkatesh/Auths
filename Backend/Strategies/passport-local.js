@@ -19,14 +19,14 @@ passport.deserializeUser((id , done)=>{
 
 var Fields = {username : 'username', password : 'password'};
 
-var authenticateUser = (username, password, done) =>{
+var authenticateUser = async (username, password, done) =>{
     var query = {username : username};
-    userLib.getSingleItemByQuery(query, model, (err,user) =>{
+    await userLib.getSingleItemByQuery(query, model, async (err,user) =>{
         if(err)
             return done(err, {message : err});
         if(!user)
             return done(null, false, {message : 'Username is incorrect'});
-        bcrypt.compare(password, user.password, (err, result) =>{
+        await bcrypt.compare(password, user.password, (err, result) =>{
             if(err)
                 return done(err, {message : err});
             if(result)

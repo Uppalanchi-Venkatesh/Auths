@@ -5,7 +5,8 @@ var userLib = require('./Backend/Lib/userLib');
 var db = require('./Backend/Database/DBconnect');
 var bodyParser = require('body-parser');
 var bcrypt = require('bcrypt');
-var passport = require('./Backend/Strategies/passport-local');
+var passport = require('passport');
+require('./Backend/Strategies/passport-local');
 require('./Backend/Strategies/passport-google');
 var session = require('express-session');
 var MongoStore = require('connect-mongo')(session);
@@ -75,10 +76,10 @@ app.get('/google',
 );
 
 app.get('/google/callback', 
-  passport.authenticate('google',{
-    successRedirect : '/dashboard',
-    failureRedirect: '/login', 
-    failureFlash: true
+    passport.authenticate('google',{
+        successRedirect : '/dashboard',
+        failureRedirect: '/login', 
+        failureFlash: true
 }));
 
 app.get('/logout', (req,res) =>{
