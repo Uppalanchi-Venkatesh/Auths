@@ -12,7 +12,6 @@ var session = require('express-session');
 var MongoStore = require('connect-mongo')(session);
 var mongoose = require('mongoose');
 var flash = require('express-flash');
-//var config = require('./Backend/Config/config')
 //var cookieParser = require('cookie-parser');
 //app.use(cookieParser());
 require('dotenv').config(); 
