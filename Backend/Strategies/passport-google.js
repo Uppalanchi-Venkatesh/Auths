@@ -19,7 +19,8 @@ passport.deserializeUser((id , done)=>{
 var customFields = {
     clientID: '210133538573-e2n0b18mi4flkrd94eumvsbk49o5nc8s.apps.googleusercontent.com',
     clientSecret: '2AcLW_1nKVWwCJN8LJwBVvln',
-    callbackURL: 'https://logins-system.herokuapp.com/google/callback'
+    //callbackURL: 'https://logins-system.herokuapp.com/google/callback'
+    callbackURL: '/google/callback'
 }
 
 var verifyCallback = (accessToken, refreshToken, profile, done) =>{

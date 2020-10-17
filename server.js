@@ -14,9 +14,9 @@ var mongoose = require('mongoose');
 var flash = require('express-flash');
 //var cookieParser = require('cookie-parser');
 //app.use(cookieParser());
-require('dotenv').config();
+require('dotenv').config(); 
 
-db.connect('mongodb+srv://venkat_chintu:Uppalanchi@14@cluster0.a4lxc.mongodb.net/<dbname>?retryWrites=true&w=majority', true);
+db.connect(process.env.CONNECTION_STRING, true);
 
 app.set('view engine','ejs');
 app.set('views', path.join(__dirname, 'Frontend', 'views'));
@@ -26,7 +26,7 @@ app.use(bodyParser.urlencoded({ extended: true }));
 app.use(flash());
 app.use(bodyParser.json());
 app.use(session({
-    secret : 'secret',
+    secret : process.env.SESSION_SECRET,
     resave : true,
     saveUninitialized : true,
     cookie: {
@@ -43,11 +43,11 @@ app.get('/', (req,res) =>{
     res.render('home', {title : 'Homepage'});
 });
 
-app.get('/login',checkNotAuthenticated, (req,res) =>{
+app.get('/login', checkNotAuthenticated, (req,res) =>{
     res.render('login', {title : 'Login'});
 });
 
-app.get('/register',checkNotAuthenticated, (req,res) =>{
+app.get('/register', checkNotAuthenticated, (req,res) =>{
     res.render('register', {title : 'Register'});
 });
 
@@ -62,8 +62,10 @@ app.post('/register', async (req,res) =>{
     }
 });
 
-app.get('/dashboard',checkAuthenticated, (req,res) =>{
-    res.send(`<h1>Welcome ${req.user.username}</h1> <a href='/logout'> Logout</a>`);
+app.get('/dashboard', checkAuthenticated, (req,res) =>{
+    //console.log("User logged in successfully");
+    //console.log("Flag : "+ req.isAuthenticated());
+    res.render('dashboard', {title : 'Dashboard', user : req.user.username});
 });
 
 app.post('/login', 
@@ -73,16 +75,25 @@ app.post('/login',
         failureFlash: true
 }));
 
-app.get('/google',
-  passport.authenticate('google', { scope: ['profile','email'] })
+app.get('/google', checkNotAuthenticated,
+    passport.authenticate('google', { scope: ['profile','email'] })
 );
 
-app.get('/google/callback', 
-    passport.authenticate('google',{
+app.get('/google/callback', checkNotAuthenticated,
+    passport.authenticate('google', {
         successRedirect : '/dashboard',
         failureRedirect: '/login', 
         failureFlash: true
 }));
+
+app.get('https://logins-system.herokuapp.com/google/callback', 
+    passport.authenticate('google', {
+        //successRedirect : '/dashboard',
+        failureRedirect: '/login', 
+        failureFlash: true
+}), (req, res) =>{
+    res.redirect('/dashboard');
+});
 
 app.get('/logout', (req,res) =>{
     req.logOut();
