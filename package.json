@@ -4,8 +4,7 @@
   "description": "",
   "main": "server.js",
   "scripts": {
-    "devStart": "nodemon server.js",
-    "build": "cross-env NODE_ENV=production webpack --config build/webpack.config.js"
+    "devStart": "nodemon server.js"
   },
   "repository": {
     "type": "git",
