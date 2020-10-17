@@ -22,7 +22,7 @@ module.exports = {
     CONNECTION_STRING : module.exports.getConnectionString(),
     PORT : process.env.PORT || 3000,
     SALT_ROUNDS : 10,
-    SESSION_SECRET : "This is login system project",
+    SESSION_SECRET : 'Thisisloginsystemproject',
     CLIENT_ID : "210133538573-e2n0b18mi4flkrd94eumvsbk49o5nc8s.apps.googleusercontent.com",
     CLIENT_SECRET : '2AcLW_1nKVWwCJN8LJwBVvln',
     CALLBACK_URL : module.exports.getCallbackURL()
