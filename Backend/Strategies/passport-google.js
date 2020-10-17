@@ -21,8 +21,8 @@ passport.deserializeUser((id , done)=>{
 var customFields = {
     clientID: process.env.CLIENT_ID,
     clientSecret: process.env.CLIENT_SECRET,
-    callbackURL : process.env.CALLBACK_URL1,
-    callbackURL: process.env.CALLBACK_URL
+    callbackURL : process.env.CALLBACK_URL,
+    callbackURL: process.env.CALLBACK_URL1
 }
 
 var verifyCallback = (accessToken, refreshToken, profile, done) =>{
