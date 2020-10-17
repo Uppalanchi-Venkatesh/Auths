@@ -12,11 +12,12 @@ var session = require('express-session');
 var MongoStore = require('connect-mongo')(session);
 var mongoose = require('mongoose');
 var flash = require('express-flash');
+var config = require('./Backend/Config/config')
 //var cookieParser = require('cookie-parser');
 //app.use(cookieParser());
-require('dotenv').config(); 
+//require('dotenv').config(); 
 
-db.connect(process.env.CONNECTION_STRING, true);
+db.connect(config.CONNECTION_STRING, true);
 
 app.set('view engine','ejs');
 app.set('views', path.join(__dirname, 'Frontend', 'views'));
@@ -26,7 +27,7 @@ app.use(bodyParser.urlencoded({ extended: true }));
 app.use(flash());
 app.use(bodyParser.json());
 app.use(session({
-    secret : process.env.SESSION_SECRET,
+    secret : config.SESSION_SECRET,
     resave : true,
     saveUninitialized : true,
     cookie: {
@@ -53,7 +54,7 @@ app.get('/register', checkNotAuthenticated, (req,res) =>{
 
 app.post('/register', async (req,res) =>{
     try{
-        req.body.password = await bcrypt.hash(req.body.password, 10);
+        req.body.password = await bcrypt.hash(req.body.password, config.SALT_ROUNDS);
         userLib.createUser(req.body);
         res.redirect('/login');
     }catch(err){

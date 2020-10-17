@@ -2,6 +2,7 @@ var passport = require('passport');
 var GoogleStrategy = require('passport-google-oauth').OAuth2Strategy;
 var userLib = require('../Lib/userLib');
 var model = require('../Model/userModel');
+var config  = require('../Config/config');
 
 passport.serializeUser((user, done)=> {
     done(null, user._id);
@@ -17,10 +18,9 @@ passport.deserializeUser((id , done)=>{
 });
 
 var customFields = {
-    clientID: '210133538573-e2n0b18mi4flkrd94eumvsbk49o5nc8s.apps.googleusercontent.com',
-    clientSecret: '2AcLW_1nKVWwCJN8LJwBVvln',
-    callbackURL: 'https://logins-system.herokuapp.com/google/callback',
-    callbackURL: '/google/callback'
+    clientID: config.CLIENT_ID,
+    clientSecret: config.CLIENT_SECRET,
+    callbackURL: config.CALLBACK_URL
 }
 
 var verifyCallback = (accessToken, refreshToken, profile, done) =>{
