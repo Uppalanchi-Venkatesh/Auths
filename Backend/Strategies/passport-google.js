@@ -2,7 +2,8 @@ var passport = require('passport');
 var GoogleStrategy = require('passport-google-oauth').OAuth2Strategy;
 var userLib = require('../Lib/userLib');
 var model = require('../Model/userModel');
-var config  = require('../Config/config');
+//var config  = require('../Config/config');
+require('dotenv').config();
 
 passport.serializeUser((user, done)=> {
     done(null, user._id);
@@ -18,9 +19,10 @@ passport.deserializeUser((id , done)=>{
 });
 
 var customFields = {
-    clientID: config.client_id,
-    clientSecret: config.client_secret,
-    callbackURL: config.callback_url
+    clientID: process.env.CLIENT_ID,
+    clientSecret: process.env.CLIENT_SECRET,
+    callbackURL : process.env.CALLBACK_URL1,
+    callbackURL: process.env.CALLBACK_URL
 }
 
 var verifyCallback = (accessToken, refreshToken, profile, done) =>{

@@ -12,12 +12,12 @@ var session = require('express-session');
 var MongoStore = require('connect-mongo')(session);
 var mongoose = require('mongoose');
 var flash = require('express-flash');
-var config = require('./Backend/Config/config')
+//var config = require('./Backend/Config/config')
 //var cookieParser = require('cookie-parser');
 //app.use(cookieParser());
-//require('dotenv').config(); 
+require('dotenv').config(); 
 
-db.connect(config.connection_string, true);
+db.connect(process.env.CONNECTION_STRING, true);
 
 app.set('view engine','ejs');
 app.set('views', path.join(__dirname, 'Frontend', 'views'));
@@ -27,7 +27,7 @@ app.use(bodyParser.urlencoded({ extended: true }));
 app.use(flash());
 app.use(bodyParser.json());
 app.use(session({
-    secret : config.session_secret,
+    secret : process.env.SESSION_SECRET,
     resave : true,
     saveUninitialized : true,
     cookie: {
@@ -54,7 +54,7 @@ app.get('/register', checkNotAuthenticated, (req,res) =>{
 
 app.post('/register', async (req,res) =>{
     try{
-        req.body.password = await bcrypt.hash(req.body.password, config.SALT_ROUNDS);
+        req.body.password = await bcrypt.hash(req.body.password, process.env.SALT_ROUNDS);
         userLib.createUser(req.body);
         res.redirect('/login');
     }catch(err){
@@ -113,8 +113,8 @@ function checkAuthenticated(req,res,next){
     res.redirect('/login');
 }
 
-//var port = process.env.PORT || 3000;
+var port = process.env.PORT || 3000;
 
-app.listen(config.port, (req,res) =>{
-    console.log(`Site Running on http://localhost:${config.port}`);
+app.listen(port, (req,res) =>{
+    console.log(`Site Running on http://localhost:${port}`);
 });

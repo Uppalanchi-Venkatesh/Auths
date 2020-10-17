@@ -10,12 +10,10 @@ module.exports.getConnectionString =function(){
 }
 
 module.exports.getCallbackURL =function(){
-    if(process.env.PRODUCTION){
+    if(process.env.PRODUCTION)
         return 'https://logins-system.herokuapp.com/google/callback';
-    }
-    else{
+    else
         return '/google/callback';
-    }
 }
 
 module.exports = {
