@@ -79,7 +79,7 @@ app.get('/google', checkNotAuthenticated,
     passport.authenticate('google', { scope: ['profile','email'] })
 );
 
-app.get('/google/callback', checkNotAuthenticated,
+app.get('/google/callback', 
     passport.authenticate('google', {
         successRedirect : '/dashboard',
         failureRedirect: '/login', 
@@ -88,12 +88,10 @@ app.get('/google/callback', checkNotAuthenticated,
 
 app.get('https://logins-system.herokuapp.com/google/callback', 
     passport.authenticate('google', {
-        //successRedirect : '/dashboard',
+        successRedirect : '/dashboard',
         failureRedirect: '/login', 
         failureFlash: true
-}), (req, res) =>{
-    res.redirect('/dashboard');
-});
+}));
 
 app.get('/logout', (req,res) =>{
     req.logOut();

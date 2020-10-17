@@ -17,11 +17,18 @@ passport.deserializeUser((id , done)=>{
     });
 });
 
+var URL = process.env.CALLBACK_URL;
+
+if(process.env.NODE_ENV === 'production')
+{
+    console.log("Production");
+    URL = process.env.CALLBACK_URL1;
+}
+
 var customFields = {
     clientID: process.env.CLIENT_ID,
     clientSecret: process.env.CLIENT_SECRET,
-    callbackURL : process.env.CALLBACK_URL,
-    callbackURL: process.env.CALLBACK_URL1
+    callbackURL : URL
 }
 
 var verifyCallback = (accessToken, refreshToken, profile, done) =>{
