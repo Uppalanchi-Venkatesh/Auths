@@ -17,7 +17,7 @@ var config = require('./Backend/Config/config')
 //app.use(cookieParser());
 //require('dotenv').config(); 
 
-db.connect(config.CONNECTION_STRING, true);
+db.connect(config.connection_string, true);
 
 app.set('view engine','ejs');
 app.set('views', path.join(__dirname, 'Frontend', 'views'));
@@ -27,7 +27,7 @@ app.use(bodyParser.urlencoded({ extended: true }));
 app.use(flash());
 app.use(bodyParser.json());
 app.use(session({
-    secret : 'SESSION_SECRET',
+    secret : config.session_secret,
     resave : true,
     saveUninitialized : true,
     cookie: {
@@ -113,8 +113,8 @@ function checkAuthenticated(req,res,next){
     res.redirect('/login');
 }
 
-var port = process.env.PORT || 3000;
+//var port = process.env.PORT || 3000;
 
-app.listen(port, (req,res) =>{
-    console.log(`Site Running on http://localhost:${port}`);
+app.listen(config.port, (req,res) =>{
+    console.log(`Site Running on http://localhost:${config.port}`);
 });

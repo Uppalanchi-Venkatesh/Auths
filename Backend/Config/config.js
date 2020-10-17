@@ -19,11 +19,11 @@ module.exports.getCallbackURL =function(){
 }
 
 module.exports = {
-    CONNECTION_STRING : module.exports.getConnectionString(),
-    PORT : process.env.PORT || 3000,
-    SALT_ROUNDS : 10,
-    SESSION_SECRET : 'Thisisloginsystemproject',
-    CLIENT_ID : "210133538573-e2n0b18mi4flkrd94eumvsbk49o5nc8s.apps.googleusercontent.com",
-    CLIENT_SECRET : '2AcLW_1nKVWwCJN8LJwBVvln',
-    CALLBACK_URL : module.exports.getCallbackURL()
+    connection_string : module.exports.getConnectionString(),
+    port : process.env.PORT || 3000,
+    salt_rounds : 10,
+    session_secret : 'Thisisloginsystemproject',
+    client_id : "210133538573-e2n0b18mi4flkrd94eumvsbk49o5nc8s.apps.googleusercontent.com",
+    client_secret : '2AcLW_1nKVWwCJN8LJwBVvln',
+    callback_url : module.exports.getCallbackURL()
 }

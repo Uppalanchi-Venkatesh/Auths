@@ -18,9 +18,9 @@ passport.deserializeUser((id , done)=>{
 });
 
 var customFields = {
-    clientID: config.CLIENT_ID,
-    clientSecret: config.CLIENT_SECRET,
-    callbackURL: config.CALLBACK_URL
+    clientID: config.client_id,
+    clientSecret: config.client_secret,
+    callbackURL: config.callback_url
 }
 
 var verifyCallback = (accessToken, refreshToken, profile, done) =>{
