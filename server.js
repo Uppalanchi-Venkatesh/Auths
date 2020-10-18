@@ -2,6 +2,7 @@ var express = require('express');
 var app = express();
 var path = require('path');
 var userLib = require('./Backend/Lib/userLib');
+var model = require('./Backend/Model/userModel');
 var db = require('./Backend/Database/DBconnect');
 var bodyParser = require('body-parser');
 var bcrypt = require('bcrypt');
@@ -51,11 +52,30 @@ app.get('/register', checkNotAuthenticated, (req,res) =>{
     res.render('register', {title : 'Register'});
 });
 
-app.post('/register', async (req,res) =>{
+// app.post('/verifyemail', (req, res)=>{
+//     if(!req.body.email || req.body.email.length == 0)
+//         return res.json({message: 'Blank email is not allowed'});
+//     var query = {email: req.body.email};
+//     userLib.getSingleItemByQuery(query, model, function(err, dbUser){
+//         if(err || dbUser)
+//             return res.json({message: 'This email already exists'});
+//         return res.redirect('/registeruser');
+//     });
+// });
+
+app.post('/register', (req,res) =>{
     try{
-        req.body.password = await bcrypt.hashSync(req.body.password, parseInt(process.env.SALT_ROUNDS));
-        userLib.createUser(req.body);
-        res.redirect('/login');
+        var query = {email : req.body.email};
+        userLib.getSingleItemByQuery(query, model, async function(err, dbUser){
+            if(err || dbUser)
+                return res.json({message: 'This email already exists'});
+            else
+            {
+                req.body.password = await bcrypt.hashSync(req.body.password, parseInt(process.env.SALT_ROUNDS));
+                userLib.createUser(req.body);
+                return res.redirect('/login');
+            }
+        });
     }catch(err){
         console.log("Error : "+err);
         res.redirect('/register');
