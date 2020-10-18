@@ -7,14 +7,16 @@ var db = require('./Backend/Database/DBconnect');
 var bodyParser = require('body-parser');
 var bcrypt = require('bcrypt');
 var passport = require('passport');
-require('./Backend/Strategies/passport-local');
-require('./Backend/Strategies/passport-google');
 var session = require('express-session');
 var MongoStore = require('connect-mongo')(session);
 var mongoose = require('mongoose');
-var flash = require('express-flash');
-//var cookieParser = require('cookie-parser');
-//app.use(cookieParser());
+var flash = require('connect-flash');
+var cookieParser = require('cookie-parser');
+var errors2 = require('./Backend/Strategies/passport-local').errors2;
+var errors1 = require('./Backend/Strategies/passport-google').errors1;
+var str1="",str2="";
+require('./Backend/Strategies/passport-local').passport;
+require('./Backend/Strategies/passport-google').passport;
 require('dotenv').config(); 
 
 db.connect(process.env.CONNECTION_STRING, true);
@@ -24,6 +26,7 @@ app.set('views', path.join(__dirname, 'Frontend', 'views'));
 
 app.use(express.json());
 app.use(bodyParser.urlencoded({ extended: true }));
+app.use(cookieParser());
 app.use(flash());
 app.use(bodyParser.json());
 app.use(session({
@@ -45,32 +48,32 @@ app.get('/', (req,res) =>{
 });
 
 app.get('/login', checkNotAuthenticated, (req,res) =>{
-    res.render('login', {title : 'Login'});
+    str1="";
+    if(errors1.length>0 && errors1[0]!=="") {
+        str1=errors1[0];
+        errors1[0]="";
+    }
+    if(errors2.length>0 && errors2[0]!=="") {
+        str1=errors2[0];
+        errors2[0]="";
+    }
+    res.render('login', {title : 'Login' , message : str1});
 });
 
 app.get('/register', checkNotAuthenticated, (req,res) =>{
-    res.render('register', {title : 'Register'});
+    res.render('register', {title : 'Register', message : str2});
 });
 
-// app.post('/verifyemail', (req, res)=>{
-//     if(!req.body.email || req.body.email.length == 0)
-//         return res.json({message: 'Blank email is not allowed'});
-//     var query = {email: req.body.email};
-//     userLib.getSingleItemByQuery(query, model, function(err, dbUser){
-//         if(err || dbUser)
-//             return res.json({message: 'This email already exists'});
-//         return res.redirect('/registeruser');
-//     });
-// });
-
 app.post('/register', (req,res) =>{
+    str2="";
     try{
         var query = {email : req.body.email};
         userLib.getSingleItemByQuery(query, model, async function(err, dbUser){
-            if(err || dbUser)
-                return res.json({message: 'This email already exists'});
-            else
-            {
+            if(dbUser){
+                str2='This email already taken!'
+                return res.redirect('/register');
+            }
+            else{
                 req.body.password = await bcrypt.hashSync(req.body.password, parseInt(process.env.SALT_ROUNDS));
                 userLib.createUser(req.body);
                 return res.redirect('/login');
@@ -78,13 +81,12 @@ app.post('/register', (req,res) =>{
         });
     }catch(err){
         console.log("Error : "+err);
+        str2=err;
         res.redirect('/register');
     }
 });
 
 app.get('/dashboard', checkAuthenticated, (req,res) =>{
-    //console.log("User logged in successfully");
-    //console.log("Flag : "+ req.isAuthenticated());
     res.render('dashboard', {title : 'Dashboard', user : req.user.username});
 });
 

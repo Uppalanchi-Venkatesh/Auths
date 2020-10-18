@@ -8,6 +8,8 @@ passport.serializeUser((user, done)=> {
     done(null, user._id);
 });
 
+var errors2=[];
+
 passport.deserializeUser((id , done)=>{
     var query = {_id : id};
     userLib.getItemById(query, model, (err, dbUser)=>{
@@ -24,14 +26,19 @@ var authenticateUser = (username, password, done) =>{
     userLib.getSingleItemByQuery(query, model, async (err,user) =>{
         if(err)
             return done(err);
-        if(!user)
-            return done(null, false, {message : 'Username is incorrect'});
+        if(!user) {
+            errors2[0]='Username is incorrect !'
+            return done(null, false);
+        }
         await bcrypt.compare(password, user.password, (err, result) =>{
-            if(err)
+            if(err) {
+                errors2[0]=err;
                 return done(err);
+            }
             if(result)
                 return done(null, user);
-            return done(null, false, {message : 'Password is incorrect!!'});
+            errors2[0]='Password is incorrect !';
+            return done(null, false);
         });
     });
 }
@@ -40,4 +47,4 @@ var strategy = new localStrategy(Fields,authenticateUser);
 
 passport.use(strategy);
 
-module.exports = passport;
+module.exports = {passport,errors2};
