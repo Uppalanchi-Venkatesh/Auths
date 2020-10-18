@@ -17,12 +17,17 @@ passport.deserializeUser((id , done)=>{
     });
 });
 
-var URL = process.env.CALLBACK_URL;
+var URL;
 
 if(process.env.NODE_ENV === 'production')
 {
     console.log("Production");
     URL = process.env.CALLBACK_URL1;
+}
+else
+{
+    console.log("Development");
+    URL = process.env.CALLBACK_URL;
 }
 
 var customFields = {

@@ -53,7 +53,7 @@ app.get('/register', checkNotAuthenticated, (req,res) =>{
 
 app.post('/register', async (req,res) =>{
     try{
-        req.body.password = await bcrypt.hash(req.body.password, process.env.SALT_ROUNDS);
+        req.body.password = await bcrypt.hashSync(req.body.password, parseInt(process.env.SALT_ROUNDS));
         userLib.createUser(req.body);
         res.redirect('/login');
     }catch(err){
