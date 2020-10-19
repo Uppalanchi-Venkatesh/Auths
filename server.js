@@ -12,11 +12,13 @@ var MongoStore = require('connect-mongo')(session);
 var mongoose = require('mongoose');
 var flash = require('connect-flash');
 var cookieParser = require('cookie-parser');
-var errors2 = require('./Backend/Strategies/passport-local').errors2;
 var errors1 = require('./Backend/Strategies/passport-google').errors1;
+var errors2 = require('./Backend/Strategies/passport-local').errors2;
+var errors3 = require('./Backend/Strategies/passport-facebook').errors3;
 var str1="",str2="";
 require('./Backend/Strategies/passport-local').passport;
 require('./Backend/Strategies/passport-google').passport;
+require('./Backend/Strategies/passport-facebook').passport;
 require('dotenv').config(); 
 
 db.connect(process.env.CONNECTION_STRING, true);
@@ -57,6 +59,10 @@ app.get('/login', checkNotAuthenticated, (req,res) =>{
         str1=errors2[0];
         errors2[0]="";
     }
+    if(errors3.length>0 && errors3[0]!=="") {
+        str1=errors3[0];
+        errors3[0]="";
+    }
     res.render('login', {title : 'Login' , message : str1});
 });
 
@@ -70,7 +76,7 @@ app.post('/register', (req,res) =>{
         var query = {email : req.body.email};
         userLib.getSingleItemByQuery(query, model, async function(err, dbUser){
             if(dbUser){
-                str2='This email already taken!'
+                str2='This email already taken !'
                 return res.redirect('/register');
             }
             else{
@@ -110,6 +116,24 @@ app.get('/google/callback',
 
 app.get('https://logins-system.herokuapp.com/google/callback', 
     passport.authenticate('google', {
+        successRedirect : '/dashboard',
+        failureRedirect: '/login', 
+        failureFlash: true
+}));
+
+app.get('/facebook',
+    passport.authenticate('facebook',{ scope: ['email'] })
+);
+
+app.get('/facebook/callback',
+    passport.authenticate('facebook', { 
+        successRedirect : '/dashboard',
+        failureRedirect: '/login',
+        failureFlash : true 
+}));
+
+app.get('https://logins-system.herokuapp.com/facebook/callback', 
+    passport.authenticate('facebook', {
         successRedirect : '/dashboard',
         failureRedirect: '/login', 
         failureFlash: true

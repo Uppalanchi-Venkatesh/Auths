@@ -1,5 +1,5 @@
 var passport = require('passport');
-var GoogleStrategy = require('passport-google-oauth').OAuth2Strategy;
+var FacebookStrategy = require('passport-facebook').Strategy;
 var userLib = require('../Lib/userLib');
 var model = require('../Model/userModel');
 require('dotenv').config();
@@ -20,38 +20,38 @@ passport.deserializeUser((id , done)=>{
 var URL;
 
 if(process.env.NODE_ENV === 'production') 
-    URL = process.env.GOOGLE_CALLBACK_URL1;
-else 
-    URL = process.env.GOOGLE_CALLBACK_URL;
+    URL = process.env.FB_CALLBACK_URL1;
+else
+    URL = process.env.FB_CALLBACK_URL;
 
 var customFields = {
-    clientID: process.env.GOOGLE_CLIENT_ID,
-    clientSecret: process.env.GOOGLE_CLIENT_SECRET,
-    callbackURL : URL
+    clientID: process.env.FB_CLIENT_ID,
+    clientSecret: process.env.FB_CLIENT_SECRET,
+    callbackURL: URL,
+    profileFields: ['id', 'displayName', 'photos', 'email']
 }
 
-var errors1=[];
+var errors3=[];
 
 var verifyCallback = (accessToken, refreshToken, profile, done) =>{
-    //console.log("Profile : "+ profile.displayName);
-    //console.log("Profile : "+JSON.stringify(profile));
-    //console.log("Email : "+ JSON.stringify(profile.emails[0].value));
+    // console.log("FB profile : "+ JSON.stringify(profile));
+    // console.log("Email : "+ profile.emails[0].value);
     var query = {email : profile.emails[0].value};
     userLib.getSingleItemByQuery(query, model, (err, user)=>{
         if(err){
-            errors1[0]=err;
+            errors3[0]=err;
             return done(err);
         }
         if(!user){
-            errors1[0]='No user with that email !';
+            errors3[0]='No user with that email !';
             return done(null, false);
         }
         return done(null, user);
     });
 }
 
-var strategy = new GoogleStrategy(customFields, verifyCallback);
+var Strategy = new FacebookStrategy(customFields, verifyCallback);
 
-passport.use(strategy);
+passport.use(Strategy);
 
-module.exports = {passport,errors1};
+module.exports = {passport,errors3};

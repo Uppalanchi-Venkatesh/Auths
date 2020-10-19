@@ -10,7 +10,7 @@
     <div class="col-md-offset-3 col-sm-offset-3 col-xs-offset-1 col-lg-offset-3 col-md-6 col-xs-10 col-sm-6 col-lg-6 col-md-offset-3 col-xs-offset-1 col-sm-offset-3 col-lg-offset-3">
         <form class="myform" action="/login" method="POST">
           <% if (message) { %>
-            <h4><div class="alert alert-danger"><%= message %></div></h4>
+            <h4><div class="alert alert-danger text-center"><%= message %></div></h4>
           <% } %>
             <div class="form-group">
               <label for="username">User Name</label>
@@ -22,7 +22,8 @@
             </div>
             <button type="submit" class="btn btn-primary">Login</button>
             <p style="margin-top: 10;"><b>New User?</b>  <a href="/register">click here</a></p>
-            <a href="/google">Google Login</a>
+            <a href="/google">Google Login</a><br>
+            <a href="/facebook">Facebook Login</a>
         </form>
     </div>
     <%- include('./partials/ScriptLinks.ejs') %>
