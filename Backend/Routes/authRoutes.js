@@ -7,37 +7,53 @@ require('../Strategies/passport-google').passport;
 require('../Strategies/passport-facebook').passport;
 require('dotenv').config(); 
 
-if(process.env.NODE_ENV === "production") {
-    GoogleURL = process.env.GOOGLE_CALLBACK_URL1;
-    FacebookURL = process.env.FB_CALLBACK_URL1;
-}else{
-    GoogleURL = process.env.GOOGLE_CALLBACK_URL;
-    FacebookURL = process.env.FB_CALLBACK_URL;
-}
+// if(process.env.NODE_ENV === "production") {
+//     GoogleURL = process.env.GOOGLE_CALLBACK_URL1;
+//     FacebookURL = process.env.FB_CALLBACK_URL1;
+// }else{
+//     GoogleURL = process.env.GOOGLE_CALLBACK_URL;
+//     FacebookURL = process.env.FB_CALLBACK_URL;
+//     console.log("URIS:" + process.env.GOOGLE_CALLBACK_URL +" "+process.env.FB_CALLBACK_URL);
+// }
+// console.log("URIS:" + process.env.GOOGLE_CALLBACK_URL1 +" "+process.env.FB_CALLBACK_URL1);
 
-router.post('/auth/login', 
+router.post('/login', 
     passport.authenticate('local',{
         successRedirect: '/dashboard',
         failureRedirect: '/login',
         failureFlash: true
 }));
 
-router.get('/auth/google', checkNotAuthenticated,
+router.get('/google', checkNotAuthenticated,
     passport.authenticate('google', { scope: ['profile','email'] })
 );
 
-router.get(GoogleURL, 
+router.get('/google/callabck', 
     passport.authenticate('google', {
         successRedirect : '/dashboard',
         failureRedirect: '/login', 
         failureFlash: true
 }));
 
-router.get('/auth/facebook',
+router.get('https://logins-system.herokuapp.com/google/callback', 
+    passport.authenticate('google', {
+        successRedirect : '/dashboard',
+        failureRedirect: '/login', 
+        failureFlash: true
+}));
+
+router.get('/facebook',
     passport.authenticate('facebook',{ scope: ['email'] })
 );
 
-router.get(FacebookURL,
+router.get('/facebook/callabck',
+    passport.authenticate('facebook', { 
+        successRedirect : '/dashboard',
+        failureRedirect: '/login',
+        failureFlash : true 
+}));
+
+router.get('https://logins-system.herokuapp.com/facebook/callback',
     passport.authenticate('facebook', { 
         successRedirect : '/dashboard',
         failureRedirect: '/login',

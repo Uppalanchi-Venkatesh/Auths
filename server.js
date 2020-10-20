@@ -47,8 +47,8 @@ app.get('/', (req,res) =>{
     res.render('home', {title : 'Homepage'});
 });
 
-//app.use('/auth', authRoutes);
-app.use(authRoutes);
+app.use('/auth', authRoutes);
+//app.use(authRoutes);
 
 app.get('/login', checkNotAuthenticated, (req,res) =>{
     str1="";
