@@ -42,7 +42,6 @@ app.use(session({
 app.use(passport.initialize());
 app.use(passport.session());
 app.use(express.static(path.join(__dirname, 'Frontend')));
-//app.use('/auth',authRoutes);
 
 app.get('/', (req,res) =>{
     res.render('home', {title : 'Homepage'});

@@ -19,7 +19,7 @@ passport.deserializeUser((id , done)=>{
 
 var URL;
 
-if(process.env.NODE_ENV === 'production') 
+if(process.env.PRODUCTION) 
     URL = process.env.GOOGLE_CALLBACK_URL1;
 else 
     URL = process.env.GOOGLE_CALLBACK_URL;
