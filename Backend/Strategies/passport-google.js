@@ -23,7 +23,7 @@ if(process.env.NODE_ENV === 'production')
     URL = process.env.GOOGLE_CALLBACK_URL1;
 else 
     URL = process.env.GOOGLE_CALLBACK_URL;
-console.log("URL : "+URL);
+
 var customFields = {
     clientID: process.env.GOOGLE_CLIENT_ID,
     clientSecret: process.env.GOOGLE_CLIENT_SECRET,
