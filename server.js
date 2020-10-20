@@ -47,8 +47,7 @@ app.get('/', (req,res) =>{
     res.render('home', {title : 'Homepage'});
 });
 
-app.use('/auth', authRoutes);
-//app.use(authRoutes);
+app.use(authRoutes);
 
 app.get('/login', checkNotAuthenticated, (req,res) =>{
     str1="";
@@ -120,7 +119,7 @@ function checkAuthenticated(req,res,next){
     res.redirect('/login');
 }
 
-var port = process.env.PORT;
+var port = process.env.PORT || 3000;
 
 app.listen(port, (req,res) =>{
     console.log(`Site Running on http://localhost:${port}`);

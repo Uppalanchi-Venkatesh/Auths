@@ -7,53 +7,37 @@ require('../Strategies/passport-google').passport;
 require('../Strategies/passport-facebook').passport;
 require('dotenv').config(); 
 
-// if(process.env.NODE_ENV === "production") {
-//     GoogleURL = process.env.GOOGLE_CALLBACK_URL1;
-//     FacebookURL = process.env.FB_CALLBACK_URL1;
-// }else{
-//     GoogleURL = process.env.GOOGLE_CALLBACK_URL;
-//     FacebookURL = process.env.FB_CALLBACK_URL;
-//     console.log("URIS:" + process.env.GOOGLE_CALLBACK_URL +" "+process.env.FB_CALLBACK_URL);
-// }
-// console.log("URIS:" + process.env.GOOGLE_CALLBACK_URL1 +" "+process.env.FB_CALLBACK_URL1);
+if(process.env.NODE_ENV === "production") {
+    GoogleURL = process.env.GOOGLE_CALLBACK_URL1;
+    FacebookURL = process.env.FB_CALLBACK_URL1;
+} else {
+    GoogleURL = process.env.GOOGLE_CALLBACK_URL;
+    FacebookURL = process.env.FB_CALLBACK_URL;
+}
 
-router.post('/login', 
+router.post('/auth/login', 
     passport.authenticate('local',{
         successRedirect: '/dashboard',
         failureRedirect: '/login',
         failureFlash: true
 }));
 
-router.get('/google', checkNotAuthenticated,
+router.get('/auth/google', checkNotAuthenticated,
     passport.authenticate('google', { scope: ['profile','email'] })
 );
 
-router.get('/google/callabck', 
+router.get(GoogleURL, 
     passport.authenticate('google', {
         successRedirect : '/dashboard',
         failureRedirect: '/login', 
         failureFlash: true
 }));
 
-router.get('https://logins-system.herokuapp.com/google/callback', 
-    passport.authenticate('google', {
-        successRedirect : '/dashboard',
-        failureRedirect: '/login', 
-        failureFlash: true
-}));
-
-router.get('/facebook',
+router.get('/auth/facebook',
     passport.authenticate('facebook',{ scope: ['email'] })
 );
 
-router.get('/facebook/callabck',
-    passport.authenticate('facebook', { 
-        successRedirect : '/dashboard',
-        failureRedirect: '/login',
-        failureFlash : true 
-}));
-
-router.get('https://logins-system.herokuapp.com/facebook/callback',
+router.get(FacebookURL,
     passport.authenticate('facebook', { 
         successRedirect : '/dashboard',
         failureRedirect: '/login',
