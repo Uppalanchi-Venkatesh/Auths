@@ -27,7 +27,7 @@ else
 var customFields = {
     clientID: process.env.GOOGLE_CLIENT_ID,
     clientSecret: process.env.GOOGLE_CLIENT_SECRET,
-    callbackURL : 'https://logins-system.herokuapp.com/auth/google/callback' 
+    callbackURL : URL
 }
 
 var errors1=[];
