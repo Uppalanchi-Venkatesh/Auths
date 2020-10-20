@@ -7,10 +7,12 @@ require('../Strategies/passport-google').passport;
 require('../Strategies/passport-facebook').passport;
 require('dotenv').config(); 
 
-if(process.env.NODE_ENV === 'production') {
+if(process.env.PRODUCTION) {
+    console.log("Production");
     GoogleURL = process.env.GOOGLE_CALLBACK_URL1;
     FacebookURL = process.env.FB_CALLBACK_URL1;
 } else {
+    console.log("Development");
     GoogleURL = process.env.GOOGLE_CALLBACK_URL;
     FacebookURL = process.env.FB_CALLBACK_URL;
 }
