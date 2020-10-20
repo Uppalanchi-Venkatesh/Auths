@@ -19,7 +19,7 @@ passport.deserializeUser((id , done)=>{
 
 var URL;
 
-if(process.env.PRODUCTION) 
+if(process.env.NODE_ENV === 'production') 
     URL = process.env.FB_CALLBACK_URL1;
 else
     URL = process.env.FB_CALLBACK_URL;
