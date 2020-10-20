@@ -43,7 +43,6 @@ app.use(passport.initialize());
 app.use(passport.session());
 app.use(express.static(path.join(__dirname, 'Frontend')));
 //app.use('/auth',authRoutes);
-app.use(authRoutes);
 
 app.get('/', (req,res) =>{
     res.render('home', {title : 'Homepage'});
@@ -97,6 +96,8 @@ app.post('/register', (req,res) =>{
         res.redirect('/register');
     }
 });
+
+app.use(authRoutes);
 
 app.get('/dashboard', checkAuthenticated, (req,res) =>{
     res.render('dashboard', {title : 'Dashboard', user : req.user.username});
