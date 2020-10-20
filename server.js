@@ -12,13 +12,11 @@ var MongoStore = require('connect-mongo')(session);
 var mongoose = require('mongoose');
 var flash = require('connect-flash');
 var cookieParser = require('cookie-parser');
+var authRoutes = require('./Backend/Routes/authRoutes');
 var errors1 = require('./Backend/Strategies/passport-google').errors1;
 var errors2 = require('./Backend/Strategies/passport-local').errors2;
 var errors3 = require('./Backend/Strategies/passport-facebook').errors3;
-var str1="",str2="";
-require('./Backend/Strategies/passport-local').passport;
-require('./Backend/Strategies/passport-google').passport;
-require('./Backend/Strategies/passport-facebook').passport;
+var str1="",str2="",str3="";
 require('dotenv').config(); 
 
 db.connect(process.env.CONNECTION_STRING, true);
@@ -49,6 +47,9 @@ app.get('/', (req,res) =>{
     res.render('home', {title : 'Homepage'});
 });
 
+//app.use('/auth', authRoutes);
+app.use(authRoutes);
+
 app.get('/login', checkNotAuthenticated, (req,res) =>{
     str1="";
     if(errors1.length>0 && errors1[0]!=="") {
@@ -67,7 +68,12 @@ app.get('/login', checkNotAuthenticated, (req,res) =>{
 });
 
 app.get('/register', checkNotAuthenticated, (req,res) =>{
-    res.render('register', {title : 'Register', message : str2});
+    str3="";
+    if(str2.length>0){
+        str3=str2;
+        str2="";
+    }
+    res.render('register', {title : 'Register', message : str3});
 });
 
 app.post('/register', (req,res) =>{
@@ -76,10 +82,11 @@ app.post('/register', (req,res) =>{
         var query = {email : req.body.email};
         userLib.getSingleItemByQuery(query, model, async function(err, dbUser){
             if(dbUser){
-                str2='This email already taken !'
+                str2='This email already taken !';
+                flag=1;
                 return res.redirect('/register');
-            }
-            else{
+            }else{
+                str2 = "";
                 req.body.password = await bcrypt.hashSync(req.body.password, parseInt(process.env.SALT_ROUNDS));
                 userLib.createUser(req.body);
                 return res.redirect('/login');
@@ -95,49 +102,6 @@ app.post('/register', (req,res) =>{
 app.get('/dashboard', checkAuthenticated, (req,res) =>{
     res.render('dashboard', {title : 'Dashboard', user : req.user.username});
 });
-
-app.post('/login', 
-    passport.authenticate('local',{
-        successRedirect: '/dashboard',
-        failureRedirect: '/login',
-        failureFlash: true
-}));
-
-app.get('/google', checkNotAuthenticated,
-    passport.authenticate('google', { scope: ['profile','email'] })
-);
-
-app.get('/google/callback', 
-    passport.authenticate('google', {
-        successRedirect : '/dashboard',
-        failureRedirect: '/login', 
-        failureFlash: true
-}));
-
-app.get('https://logins-system.herokuapp.com/google/callback', 
-    passport.authenticate('google', {
-        successRedirect : '/dashboard',
-        failureRedirect: '/login', 
-        failureFlash: true
-}));
-
-app.get('/facebook',
-    passport.authenticate('facebook',{ scope: ['email'] })
-);
-
-app.get('/facebook/callback',
-    passport.authenticate('facebook', { 
-        successRedirect : '/dashboard',
-        failureRedirect: '/login',
-        failureFlash : true 
-}));
-
-app.get('https://logins-system.herokuapp.com/facebook/callback', 
-    passport.authenticate('facebook', {
-        successRedirect : '/dashboard',
-        failureRedirect: '/login', 
-        failureFlash: true
-}));
 
 app.get('/logout', (req,res) =>{
     req.logOut();
@@ -156,7 +120,7 @@ function checkAuthenticated(req,res,next){
     res.redirect('/login');
 }
 
-var port = process.env.PORT || 3000;
+var port = process.env.PORT;
 
 app.listen(port, (req,res) =>{
     console.log(`Site Running on http://localhost:${port}`);
