@@ -22,11 +22,11 @@ router.post('/auth/login',
         failureFlash: true
 }));
 
-router.get('/auth/google', checkNotAuthenticated,
+router.get('/auth/google', 
     passport.authenticate('google', { scope: ['profile','email'] })
 );
 
-router.get(GoogleURL, 
+router.get('/auth/google/callback', 
     passport.authenticate('google', {
         successRedirect : '/dashboard',
         failureRedirect: '/login', 

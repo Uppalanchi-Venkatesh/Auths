@@ -27,7 +27,7 @@ else
 var customFields = {
     clientID: process.env.GOOGLE_CLIENT_ID,
     clientSecret: process.env.GOOGLE_CLIENT_SECRET,
-    callbackURL : URL
+    callbackURL : '/auth/google/callback' 
 }
 
 var errors1=[];
