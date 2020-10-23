@@ -31,7 +31,7 @@ app.use(flash());
 app.use(bodyParser.json());
 app.use(session({
     secret : process.env.SESSION_SECRET,
-    resave : true,
+    resave : false,
     saveUninitialized : true,
     cookie: {
         maxAge: 1000 * 60 * 60 * 24 * 7 
@@ -66,7 +66,7 @@ app.get('/login', checkNotAuthenticated, (req,res) =>{
 
 app.get('/register', checkNotAuthenticated, (req,res) =>{
     str3="";
-    if(str2.length>0){
+    if(str2.length>0) {
         str3=str2;
         str2="";
     }
@@ -78,18 +78,18 @@ app.post('/register', (req,res) =>{
     try{
         var query = {email : req.body.email};
         userLib.getSingleItemByQuery(query, model, async function(err, dbUser){
-            if(dbUser){
+            if(dbUser) {
                 str2='This email already taken !';
                 flag=1;
                 return res.redirect('/register');
-            }else{
+            }else {
                 str2 = "";
                 req.body.password = await bcrypt.hashSync(req.body.password, parseInt(process.env.SALT_ROUNDS));
                 userLib.createUser(req.body);
                 return res.redirect('/login');
             }
         });
-    }catch(err){
+    }catch(err) {
         console.log("Error : "+err);
         str2=err;
         res.redirect('/register');
@@ -102,9 +102,14 @@ app.get('/dashboard', checkAuthenticated, (req,res) =>{
     res.render('dashboard', {title : 'Dashboard', user : req.user.username});
 });
 
-app.get('/logout', (req,res) =>{
-    req.logOut();
-    res.redirect('/login');
+app.get('/logout', function (req, res) {
+    req.logout();
+    req.session.destroy(function (err) {
+        if(err)
+            return next(err);
+        req.session = null;
+        res.redirect('/login');
+    });
 });
 
 function checkNotAuthenticated(req,res,next){
