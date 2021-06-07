@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <%- include('./partials/StyleLinks.ejs') %>
+    <meta name="google-signin-client_id" content="1041716110954-0mhu9q8hac0878tr8etspj7grc64r0m2.apps.googleusercontent.com">
+</head>
+<body>
+    <%- include('./page-partials/navbar.ejs') %>
+    <div class="g-signin2" data-onsuccess="onSignIn"></div>
+    <a href="/login" onclick="signOut()">Sign out</a>
+    <%- include('./partials/ScriptLinks.ejs') %>
+    <script src="https://apis.google.com/js/platform.js" async defer></script>
+    <script>
+        function onSignIn(googleUser) {
+            var profile = googleUser.getBasicProfile();
+            console.log('ID: ' + profile.getId()); 
+            console.log('Name: ' + profile.getName());
+            console.log('Image URL: ' + profile.getImageUrl());
+            console.log('Email: ' + profile.getEmail());
+        }
+
+        function signOut() {
+            var auth2 = gapi.auth2.getAuthInstance();
+            auth2.signOut().then(() => console.log('User signed out.'));
+        }
+    </script>
+</body>
+</html>
